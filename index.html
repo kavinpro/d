@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Welcome to Kavin's Coins Math Game - Robux</title>
+  <style>
+    body {
+      font-family: 'Comic Sans MS', cursive, sans-serif;
+      background-color: #f0f8ff;
+      margin: 0;
+      padding: 0;
+    }
+    .container {
+      text-align: center;
+      padding: 50px;
+    }
+    input, button {
+      font-size: 18px;
+      padding: 10px;
+      margin: 5px;
+    }
+    .hidden {
+      display: none;
+    }
+    .quiz-container button {
+      display: block;
+      margin: 10px auto;
+      padding: 10px 20px;
+      background-color: #ffd700;
+      border: none;
+      border-radius: 10px;
+    }
+    .reward {
+      font-size: 24px;
+      color: green;
+    }
+  </style>
+</head>
+<body>
+  <div class="container" id="login">
+    <h1>Welcome to Kavin's Coins Math Game - Robux</h1>
+    <input type="text" id="username" placeholder="Username" /><br />
+    <input type="password" id="password" placeholder="Password" /><br />
+    <button onclick="login()">Login</button>
+    <p id="error" style="color:red;"></p>
+  </div>
+
+  <div class="container hidden" id="main">
+    <h2>Hello, Chiemerie! Ready to earn Kavin's Coins?</h2>
+    <p>Coins Collected: <span id="coins">0</span></p>
+    <button onclick="startStage(1)">🎨 Stage 1: Shape Explorer</button>
+    <button onclick="startStage(2)">💰 Stage 2: Money Match</button>
+    <button onclick="startStage(3)">🍰 Stage 3: Fraction Fun</button>
+  </div>
+
+  <div class="container hidden quiz-container" id="quiz"></div>
+
+  <script>
+    let coins = 0;
+    let currentStage = 0;
+    const questions = {
+      1: [
+        { q: "Which shape has three sides?", options: ["Circle", "Triangle", "Square"], answer: "Triangle" },
+        { q: "Which shape has 4 equal sides?", options: ["Square", "Rectangle", "Oval"], answer: "Square" },
+        { q: "What shape is round and has no corners?", options: ["Triangle", "Circle", "Rectangle"], answer: "Circle" }
+      ],
+      2: [
+        { q: "Which coin is worth 100 pence?", options: ["1p coin", "10p coin", "£1 coin"], answer: "£1 coin" },
+        { q: "Which coin has the highest value?", options: ["100 of 1p coin", "£2 coin", "50p coin"], answer: "£2 coin" },
+        { q: "How much is five 20 pence coin worth?", options: ["5p", "10p", "£1"], answer: "£1" }
+      ],
+      3: [
+        { q: "Which is equal to one-half?", options: ["Half a cake", "One slice of three", "A whole pizza"], answer: "Half a cake" },
+        { q: "How many 50p coins make a pound?", options: ["2", "4", "3"], answer: "2" },
+        { q: "Which is one-third?", options: ["Three slices of three", "One slice of three", "Two slices of four"], answer: "One slice of three" }
+      ]
+    };
+
+    function login() {
+      const u = document.getElementById("username").value;
+      const p = document.getElementById("password").value;
+      if (u === "Chiemerie" && p === "1234") {
+        document.getElementById("login").classList.add("hidden");
+        document.getElementById("main").classList.remove("hidden");
+      } else {
+        document.getElementById("error").textContent = "Wrong username or password!";
+      }
+    }
+
+    function startStage(stage) {
+      currentStage = stage;
+      showQuestion(0);
+    }
+
+    function showQuestion(index) {
+      const quizDiv = document.getElementById("quiz");
+      document.getElementById("main").classList.add("hidden");
+      quizDiv.classList.remove("hidden");
+
+      if (index >= questions[currentStage].length) {
+        quizDiv.innerHTML = `<h2>Great Job! You've completed Stage ${currentStage}!</h2><p class='reward'>You've earned ${questions[currentStage].length} Kavin's Coins!</p><button onclick='backToMain()'>Back to Menu</button>`;
+        coins += questions[currentStage].length;
+        document.getElementById("coins").textContent = coins;
+        return;
+      }
+
+      const q = questions[currentStage][index];
+      let html = `<h3>${q.q}</h3>`;
+      q.options.forEach(option => {
+        html += `<button onclick=\"checkAnswer('${option}', '${q.answer}', ${index})\">${option}</button>`;
+      });
+      quizDiv.innerHTML = html;
+    }
+
+    function checkAnswer(selected, correct, index) {
+      if (selected === correct) {
+        showQuestion(index + 1);
+      } else {
+        alert("Oops! Try again.");
+      }
+    }
+
+    function backToMain() {
+      document.getElementById("quiz").classList.add("hidden");
+      document.getElementById("main").classList.remove("hidden");
+    }
+  </script>
+</body>
+</html>
